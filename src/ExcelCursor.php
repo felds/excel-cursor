@@ -58,12 +58,13 @@ class ExcelCursor
 
     public static function columnIndexFromName(string $name): int
     {
+        // normalize the name to uppercase, split it into chars and reverse the order
         $chars = array_reverse(str_split(strtoupper($name)));
 
         $sum = 0;
         foreach ($chars as $i => $char) {
             $charValue = ord($char) - 65 + 1; // 65 = ord("A")
-            $sum += $charValue * (26 ** $i);
+            $sum += $charValue * (26 ** $i); // add current char to the accumulator
         }
 
         return $sum;
