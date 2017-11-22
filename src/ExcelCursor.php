@@ -19,7 +19,7 @@ class ExcelCursor
             throw new \InvalidArgumentException("Bad initial position “{$pos}”.");
 
         $this->col = self::columnIndexFromName($results[1]);
-        $this->row = $results[2];
+        $this->row = (int) $results[2];
     }
 
     public function __toString()
