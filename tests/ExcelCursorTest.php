@@ -16,7 +16,7 @@ class ExcelCursorTest extends TestCase
 
     /**
      * @test
-     * @dataProvider badPosition
+     * @dataProvider bad_positions
      * @expectedException InvalidArgumentException
      */
     function validate_initial_position(string $pos)
@@ -26,7 +26,7 @@ class ExcelCursorTest extends TestCase
 
     /**
      * @test
-     * @dataProvider goodPositions
+     * @dataProvider good_positions
      */
     function get_the_cursor_position(string $pos)
     {
@@ -37,7 +37,7 @@ class ExcelCursorTest extends TestCase
 
     /**
      * @test
-     * @dataProvider rowMovement
+     * @dataProvider row_movement
      */
     function move_row($from, $to, $mov = null)
     {
@@ -50,7 +50,7 @@ class ExcelCursorTest extends TestCase
 
     /**
      * @test
-     * @dataProvider colMovement
+     * @dataProvider col_movement
      */
     function move_col($from, $to, $mov = null)
     {
@@ -79,21 +79,69 @@ class ExcelCursorTest extends TestCase
         $this->assertSame(strtoupper($name), ExcelCursor::columnNameFromIndex($index));
     }
 
-    function badPosition()
+    /**
+     * @test
+     * @dataProvider good_rows
+     */
+    function go_to_row($initial, $row, $expected)
+    {
+        $sut = new ExcelCursor($initial);
+
+        $sut->goToRow($row);
+        $this->assertSame($expected, (string) $sut);
+    }
+
+    /**
+     * @test
+     * @dataProvider bad_rows
+     */
+    function dont_go_to_row($row)
+    {
+        $sut = new ExcelCursor();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $sut->goToRow($row);
+    }
+
+    /**
+     * @test
+     * @dataProvider good_col_indices
+     */
+    function go_to_col($initial, $col, $expected)
+    {
+        $sut = new ExcelCursor($initial);
+
+        $sut->goToCol($col);
+        $this->assertSame($expected, (string) $sut);
+    }
+
+    /**
+     * @test
+     * @dataProvider bad_col_indices
+     */
+    function dont_go_to_col($index)
+    {
+        $sut = new ExcelCursor();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $sut->goToCol($index);
+    }
+
+    function bad_positions()
     {
         return [
             [''], ['A'], ['1'], ['+A2'], ['34A']
         ];
     }
 
-    function goodPositions()
+    function good_positions()
     {
         return [
             ['A1'], ['b3'], ['AA4'], ['B87'], ['AA989']
         ];
     }
 
-    function rowMovement()
+    function row_movement()
     {
         return [
             ['A1', 'A2'],
@@ -105,7 +153,7 @@ class ExcelCursorTest extends TestCase
         ];
     }
 
-    function colMovement()
+    function col_movement()
     {
         return [
             ['A1', 'B1'],
@@ -129,4 +177,35 @@ class ExcelCursorTest extends TestCase
             ["fdp", 4176],
         ];
     }
+
+    function good_rows()
+    {
+        return [
+            ['A1', 2, 'A2'],
+            ['B5', 5, 'B5'],
+            ['ZZ129', 999, 'ZZ999'],
+        ];
+    }
+
+    function bad_rows()
+    {
+        return [[0], [-1]];
+    }
+
+    function good_col_indices()
+    {
+        return [
+            ['A1', 1, 'A1'],
+            ['C12', 1, 'A12'],
+            ['A9', 27, 'AA9'],
+        ];
+    }
+
+    function bad_col_indices()
+    {
+        return [
+            [0], [-1], [-999]
+        ];
+    }
+
 }

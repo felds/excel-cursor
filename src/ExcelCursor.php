@@ -11,7 +11,7 @@ class ExcelCursor
     /** @var int */
     private $row;
 
-    public function __construct(string $pos)
+    public function __construct(string $pos = "A1")
     {
         $isValid = preg_match('{^([a-z]+)([0-9]+)$}i', $pos, $results);
 
@@ -37,6 +37,24 @@ class ExcelCursor
     public function moveCol(int $mov = null): self
     {
         $this->col = max($this->col + ($mov ?? 1), 1);
+
+        return $this;
+    }
+
+    public function goToRow(int $row): self
+    {
+        if ($row < 1) throw new \InvalidArgumentException("The row can't be smaller than 1.");
+
+        $this->row = $row;
+
+        return $this;
+    }
+
+    public function goToCol(int $col): self
+    {
+        if ($col < 1) throw new \InvalidArgumentException("The col can't be smaller than 1.");
+
+        $this->col = $col;
 
         return $this;
     }
