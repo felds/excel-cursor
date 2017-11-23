@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Felds\ExcelCursor;
 
-class ExcelCursor
+class Cursor
 {
     /** @var string */
     private $col;
@@ -22,7 +22,12 @@ class ExcelCursor
         $this->row = (int) $results[2];
     }
 
-    public function __toString()
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
+    public function getName(): string
     {
         return self::columnNameFromIndex($this->col) . $this->row;
     }
@@ -59,6 +64,12 @@ class ExcelCursor
         return $this;
     }
 
+    public function createRange(): Range
+    {
+        return Range::fromCursor($this);
+
+    }
+
     public static function columnNameFromIndex(int $index): string
     {
         $name = "";
@@ -72,7 +83,6 @@ class ExcelCursor
 
         return $name;
     }
-
 
     public static function columnIndexFromName(string $name): int
     {

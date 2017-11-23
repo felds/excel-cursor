@@ -1,27 +1,28 @@
 <?php
+declare(strict_types=1);
 
 namespace Felds\ExcelCursor;
 
 use PHPUnit\Framework\TestCase;
 
-class ExcelCursorTest extends TestCase
+class CursorTest extends TestCase
 {
     /** @test */
     function create_a_cursor()
     {
-        $sut = new ExcelCursor('A1');
+        $sut = new Cursor('A1');
 
-        $this->assertInstanceOf(ExcelCursor::class, $sut);
+        $this->assertInstanceOf(Cursor::class, $sut);
     }
 
     /**
      * @test
      * @dataProvider bad_positions
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     function validate_initial_position(string $pos)
     {
-        new ExcelCursor($pos);
+        new Cursor($pos);
     }
 
     /**
@@ -30,7 +31,7 @@ class ExcelCursorTest extends TestCase
      */
     function get_the_cursor_position(string $pos)
     {
-        $sut = new ExcelCursor($pos);
+        $sut = new Cursor($pos);
 
         $this->assertEquals(strtoupper($pos), (string)$sut);
     }
@@ -41,7 +42,7 @@ class ExcelCursorTest extends TestCase
      */
     function move_row($from, $to, $mov = null)
     {
-        $sut = new ExcelCursor($from);
+        $sut = new Cursor($from);
 
         $sut->moveRow($mov);
 
@@ -54,7 +55,7 @@ class ExcelCursorTest extends TestCase
      */
     function move_col($from, $to, $mov = null)
     {
-        $sut = new ExcelCursor($from);
+        $sut = new Cursor($from);
 
         $sut->moveCol($mov);
 
@@ -67,7 +68,7 @@ class ExcelCursorTest extends TestCase
      */
     function parse_column_name($name, $index)
     {
-        $this->assertSame($index, ExcelCursor::columnIndexFromName($name));
+        $this->assertSame($index, Cursor::columnIndexFromName($name));
     }
 
     /**
@@ -76,7 +77,7 @@ class ExcelCursorTest extends TestCase
      */
     function parse_column_index($name, $index)
     {
-        $this->assertSame(strtoupper($name), ExcelCursor::columnNameFromIndex($index));
+        $this->assertSame(strtoupper($name), Cursor::columnNameFromIndex($index));
     }
 
     /**
@@ -85,7 +86,7 @@ class ExcelCursorTest extends TestCase
      */
     function go_to_row($initial, $row, $expected)
     {
-        $sut = new ExcelCursor($initial);
+        $sut = new Cursor($initial);
 
         $sut->goToRow($row);
         $this->assertSame($expected, (string) $sut);
@@ -97,7 +98,7 @@ class ExcelCursorTest extends TestCase
      */
     function dont_go_to_row($row)
     {
-        $sut = new ExcelCursor();
+        $sut = new Cursor();
 
         $this->expectException(\InvalidArgumentException::class);
         $sut->goToRow($row);
@@ -109,7 +110,7 @@ class ExcelCursorTest extends TestCase
      */
     function go_to_col($initial, $col, $expected)
     {
-        $sut = new ExcelCursor($initial);
+        $sut = new Cursor($initial);
 
         $sut->goToCol($col);
         $this->assertSame($expected, (string) $sut);
@@ -121,10 +122,21 @@ class ExcelCursorTest extends TestCase
      */
     function dont_go_to_col($index)
     {
-        $sut = new ExcelCursor();
+        $sut = new Cursor();
 
         $this->expectException(\InvalidArgumentException::class);
         $sut->goToCol($index);
+    }
+
+    /**
+     * @test
+     */
+    function create_range()
+    {
+        $cursor = new Cursor("B4");
+        $range = $cursor->createRange();
+
+        $this->assertSame('B4:B4', (string) $range);
     }
 
     function bad_positions()
