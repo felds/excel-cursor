@@ -1,4 +1,4 @@
-script: compose test
+script: composer test
 language: php
 php:
     - '7.0'
