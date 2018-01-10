@@ -17,9 +17,14 @@ class Range extends Cursor
         $this->origin = (clone $this);
     }
 
-    public function __toString(): string
+    public function getName(): string
     {
-        return sprintf('%s:%s', $this->origin->getName(), $this->getName());
+        $cols = [$this->col, $this->origin->col];
+        $rows = [$this->row, $this->origin->row];
+
+        return sprintf('%s%s:%s%s',
+            self::columnNameFromIndex(min($cols)), min($rows),
+            self::columnNameFromIndex(max($cols)), max($rows));
     }
 
     public static function fromCursor(Cursor $origin): self

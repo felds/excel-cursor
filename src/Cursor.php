@@ -6,10 +6,10 @@ namespace Felds\ExcelCursor;
 class Cursor
 {
     /** @var string */
-    private $col;
+    protected $col;
 
     /** @var int */
-    private $row;
+    protected $row;
 
     public function __construct(string $pos = "A1")
     {
