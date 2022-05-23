@@ -18,10 +18,10 @@ class CursorTest extends TestCase
     /**
      * @test
      * @dataProvider bad_positions
-     * @expectedException \InvalidArgumentException
      */
     function validate_initial_position(string $pos)
     {
+        $this->expectException(\InvalidArgumentException::class);
         new Cursor($pos);
     }
 
