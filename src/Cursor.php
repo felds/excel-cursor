@@ -5,7 +5,7 @@ namespace Felds\ExcelCursor;
 
 class Cursor
 {
-    /** @var string */
+    /** @var int */
     protected $col;
 
     /** @var int */
@@ -27,25 +27,53 @@ class Cursor
         return $this->getName();
     }
 
+    /**
+     * Get the column name as `A1`.
+     */
     public function getName(): string
     {
         return self::columnNameFromIndex($this->col) . $this->row;
     }
 
-    public function moveRow(int $mov = null): self
+    /**
+     * Get the current column.
+     */
+    public function getCol(): int
     {
-        $this->row = max($this->row + ($mov ?? 1), 1);
+        return $this->col;
+    }
+
+    /**
+     * Get the current row.
+     */
+    public function getRow(): int
+    {
+        return $this->row;
+    }
+
+    /**
+     * Move `$n` rows down.
+     */
+    public function moveRow(int $n = null): self
+    {
+        $this->row = max($this->row + ($n ?? 1), 1);
 
         return $this;
     }
 
-    public function moveCol(int $mov = null): self
+    /**
+     * Move `$n` columns to the right.
+     */
+    public function moveCol(int $n = null): self
     {
-        $this->col = max($this->col + ($mov ?? 1), 1);
+        $this->col = max($this->col + ($n ?? 1), 1);
 
         return $this;
     }
 
+    /**
+     * Go to the row `$row`.
+     */
     public function goToRow(int $row): self
     {
         if ($row < 1) throw new \InvalidArgumentException("The row can't be smaller than 1.");
@@ -55,6 +83,9 @@ class Cursor
         return $this;
     }
 
+    /**
+     * Go to column `$col`.
+     */
     public function goToCol(int $col): self
     {
         if ($col < 1) throw new \InvalidArgumentException("The col can't be smaller than 1.");
