@@ -54,7 +54,7 @@ class Cursor
     /**
      * Move `$n` rows down.
      */
-    public function moveRow(int $n = null): self
+    public function moveRow(?int $n = null): self
     {
         $this->row = max($this->row + ($n ?? 1), 1);
 
@@ -64,7 +64,7 @@ class Cursor
     /**
      * Move `$n` columns to the right.
      */
-    public function moveCol(int $n = null): self
+    public function moveCol(?int $n = null): self
     {
         $this->col = max($this->col + ($n ?? 1), 1);
 
@@ -74,7 +74,7 @@ class Cursor
     /**
      * Go to the row `$row`.
      */
-    public function goToRow(int $row): self
+    public function goToRow(?int $row): self
     {
         if ($row < 1) throw new \InvalidArgumentException("The row can't be smaller than 1.");
 
