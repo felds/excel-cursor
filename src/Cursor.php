@@ -5,8 +5,17 @@ namespace Felds\ExcelCursor;
 
 class Cursor
 {
-    protected int $col;
-    protected int $row;
+    protected int $col {
+        get {
+            return $this->col;
+        }
+    }
+
+    protected int $row {
+        get {
+            return $this->row;
+        }
+    }
 
     public function __construct(string $pos = "A1")
     {
@@ -30,22 +39,6 @@ class Cursor
     public function getName(): string
     {
         return self::columnNameFromIndex($this->col) . $this->row;
-    }
-
-    /**
-     * Get the current column index.
-     */
-    public function getCol(): int
-    {
-        return $this->col;
-    }
-
-    /**
-     * Get the current row index.
-     */
-    public function getRow(): int
-    {
-        return $this->row;
     }
 
     /**
