@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Felds\ExcelCursor;
-
+use Felds\ExcelCursor\Cursor;
 use PHPUnit\Framework\TestCase;
 
 class CursorTest extends TestCase
