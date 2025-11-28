@@ -8,6 +8,14 @@ use PHPUnit\Framework\TestCase;
 class CursorTest extends TestCase
 {
     /** @test */
+    function props()
+    {
+        $sut = new Cursor('D20');
+        $this->assertEquals(4, $sut->col);
+        $this->assertEquals(20, $sut->row);
+    }
+
+    /** @test */
     function create_a_cursor()
     {
         $sut = new Cursor('A1');

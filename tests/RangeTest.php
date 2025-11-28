@@ -7,6 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class RangeTest extends TestCase
 {
+    /** @test */
+    function props()
+    {
+        $sut = new Range();
+        $this->assertInstanceOf(Cursor::class, $sut->origin);
+    }
+
     /**
      * @test
      */

@@ -5,17 +5,9 @@ namespace Felds\ExcelCursor;
 
 class Cursor
 {
-    protected int $col {
-        get {
-            return $this->col;
-        }
-    }
+    protected(set) int $col;
 
-    protected int $row {
-        get {
-            return $this->row;
-        }
-    }
+    protected(set) int $row;
 
     public function __construct(string $pos = "A1")
     {
@@ -44,7 +36,7 @@ class Cursor
     /**
      * Move `$n` rows down.
      */
-    public function moveRow(int $n = 1): self
+    public function moveRow(int $n = 1): static
     {
         $this->row = max($this->row + $n, 1);
         return $this;
@@ -53,7 +45,7 @@ class Cursor
     /**
      * Move `$n` columns to the right.
      */
-    public function moveCol(int $n = 1): self
+    public function moveCol(int $n = 1): static
     {
         $this->col = max($this->col + $n, 1);
         return $this;
@@ -62,7 +54,7 @@ class Cursor
     /**
      * Go to the row `$row`.
      */
-    public function goToRow(int $row): self
+    public function goToRow(int $row): static
     {
         if ($row < 1) {
             throw new \InvalidArgumentException("The row can't be smaller than 1.");
@@ -74,7 +66,7 @@ class Cursor
     /**
      * Go to column `$col`.
      */
-    public function goToCol(int $col): self
+    public function goToCol(int $col): static
     {
         if ($col < 1) {
             throw new \InvalidArgumentException("The col can't be smaller than 1.");

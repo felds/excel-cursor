@@ -5,15 +5,11 @@ namespace Felds\ExcelCursor;
 
 class Range extends Cursor
 {
-    /**
-     * @var Cursor
-     */
-    private $origin;
+    protected(set) Cursor $origin;
 
-    public function __construct($pos = "A1")
+    public function __construct(string $pos = "A1")
     {
         parent::__construct($pos);
-
         $this->origin = (clone $this);
     }
 
@@ -27,16 +23,10 @@ class Range extends Cursor
             self::columnNameFromIndex(max($cols)), max($rows));
     }
 
-    public static function fromCursor(Cursor $origin): self
+    public static function fromCursor(Cursor $origin): static
     {
         $self = new static((string) $origin);
         $self->origin = clone $origin;
-
         return $self;
-    }
-
-    public function getOrigin(): Cursor
-    {
-        return $this->origin;
     }
 }
