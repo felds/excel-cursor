@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Felds\ExcelCursor;
@@ -44,7 +45,11 @@ class CursorTest extends TestCase
     {
         $sut = new Cursor($from);
 
-        $sut->moveRow($mov);
+        if ($mov === null) {
+            $sut->moveRow();
+        } else {
+            $sut->moveRow($mov);
+        }
 
         $this->assertSame($to, (string)$sut);
     }
@@ -57,7 +62,11 @@ class CursorTest extends TestCase
     {
         $sut = new Cursor($from);
 
-        $sut->moveCol($mov);
+        if ($mov === null) {
+            $sut->moveCol();
+        } else {
+            $sut->moveCol($mov);
+        }
 
         $this->assertSame($to, (string)$sut);
     }
@@ -89,7 +98,7 @@ class CursorTest extends TestCase
         $sut = new Cursor($initial);
 
         $sut->goToRow($row);
-        $this->assertSame($expected, (string) $sut);
+        $this->assertSame($expected, (string)$sut);
     }
 
     /**
@@ -113,7 +122,7 @@ class CursorTest extends TestCase
         $sut = new Cursor($initial);
 
         $sut->goToCol($col);
-        $this->assertSame($expected, (string) $sut);
+        $this->assertSame($expected, (string)$sut);
     }
 
     /**
@@ -136,20 +145,28 @@ class CursorTest extends TestCase
         $cursor = new Cursor("B4");
         $range = $cursor->createRange();
 
-        $this->assertSame('B4:B4', (string) $range);
+        $this->assertSame('B4:B4', (string)$range);
     }
 
     function bad_positions()
     {
         return [
-            [''], ['A'], ['1'], ['+A2'], ['34A']
+            [''],
+            ['A'],
+            ['1'],
+            ['+A2'],
+            ['34A'],
         ];
     }
 
     function good_positions()
     {
         return [
-            ['A1'], ['b3'], ['AA4'], ['B87'], ['AA989']
+            ['A1'],
+            ['b3'],
+            ['AA4'],
+            ['B87'],
+            ['AA989'],
         ];
     }
 
@@ -216,7 +233,9 @@ class CursorTest extends TestCase
     function bad_col_indices()
     {
         return [
-            [0], [-1], [-999]
+            [0],
+            [-1],
+            [-999],
         ];
     }
 

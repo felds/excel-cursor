@@ -5,11 +5,8 @@ namespace Felds\ExcelCursor;
 
 class Cursor
 {
-    /** @var int */
-    protected $col;
-
-    /** @var int */
-    protected $row;
+    protected int $col;
+    protected int $row;
 
     public function __construct(string $pos = "A1")
     {
@@ -28,7 +25,7 @@ class Cursor
     }
 
     /**
-     * Get the column name as `A1`.
+     * Get the cell name as `A1`.
      */
     public function getName(): string
     {
@@ -36,7 +33,7 @@ class Cursor
     }
 
     /**
-     * Get the current column.
+     * Get the current column index.
      */
     public function getCol(): int
     {
@@ -44,7 +41,7 @@ class Cursor
     }
 
     /**
-     * Get the current row.
+     * Get the current row index.
      */
     public function getRow(): int
     {
@@ -54,32 +51,30 @@ class Cursor
     /**
      * Move `$n` rows down.
      */
-    public function moveRow(?int $n = null): self
+    public function moveRow(int $n = 1): self
     {
-        $this->row = max($this->row + ($n ?? 1), 1);
-
+        $this->row = max($this->row + $n, 1);
         return $this;
     }
 
     /**
      * Move `$n` columns to the right.
      */
-    public function moveCol(?int $n = null): self
+    public function moveCol(int $n = 1): self
     {
-        $this->col = max($this->col + ($n ?? 1), 1);
-
+        $this->col = max($this->col + $n, 1);
         return $this;
     }
 
     /**
      * Go to the row `$row`.
      */
-    public function goToRow(?int $row): self
+    public function goToRow(int $row): self
     {
-        if ($row < 1) throw new \InvalidArgumentException("The row can't be smaller than 1.");
-
+        if ($row < 1) {
+            throw new \InvalidArgumentException("The row can't be smaller than 1.");
+        }
         $this->row = $row;
-
         return $this;
     }
 
@@ -88,30 +83,27 @@ class Cursor
      */
     public function goToCol(int $col): self
     {
-        if ($col < 1) throw new \InvalidArgumentException("The col can't be smaller than 1.");
-
+        if ($col < 1) {
+            throw new \InvalidArgumentException("The col can't be smaller than 1.");
+        }
         $this->col = $col;
-
         return $this;
     }
 
     public function createRange(): Range
     {
         return Range::fromCursor($this);
-
     }
 
     public static function columnNameFromIndex(int $index): string
     {
         $name = "";
-
         while ($index > 0) {
-            $charValue = ($index - 1) % 26; // current char codepoint
-            $char = chr(65 + $charValue); // the actual char
-            $name = $char . $name; // prepend the char
-            $index = ($index - $charValue - 1) / 26; // take of the char and step down the char
+            $charValue = ($index - 1) % 26;
+            $char = chr(65 + $charValue);
+            $name = $char . $name;
+            $index = intdiv($index - $charValue - 1, 26);
         }
-
         return $name;
     }
 
@@ -119,13 +111,11 @@ class Cursor
     {
         // normalize the name to uppercase, split it into chars and reverse the order
         $chars = array_reverse(str_split(strtoupper($name)));
-
         $sum = 0;
         foreach ($chars as $i => $char) {
             $charValue = ord($char) - 65 + 1; // 65 = ord("A")
             $sum += $charValue * (26 ** $i); // add current char to the accumulator
         }
-
         return $sum;
     }
 }
